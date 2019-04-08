@@ -1,0 +1,29 @@
+SELECT * FROM `sg_data_thin` WHERE instr(`Company Name`,"mercado")
+UPDATE `sg_data_thin` SET spanish=1 WHERE instr(`Company Name`,"mercado")
+SELECT * FROM `sg_data_thin` WHERE `Company Name` LIKE '%LA %'
+
+// companies with at least 2 offices
+select *, count(*) from sg_thin_no_span group by `Company Name` HAVING count(*) > 1 ORDER BY `Company Name`
+
+SELECT sg_thin_no_span.* 
+FROM sg_thin_no_span
+   INNER JOIN (SELECT Company_Name
+               FROM   sg_thin_no_span
+               GROUP  BY Company_Name
+               HAVING COUNT(id) > 1) dup
+           ON sg_thin_no_span.Company_Name = dup.Company_Name
+           ORDER BY Company_Name
+
+
+
+// flag spanish items
+UPDATE `sg_thin_no_span` SET spanish=1 WHERE `Company Name` LIKE '%servicio%';
+UPDATE `sg_thin_no_span` SET spanish=1 WHERE `Company Name` LIKE '%hispano%';
+UPDATE `sg_thin_no_span` SET spanish=1 WHERE `Company Name` LIKE '%mercado%';
+UPDATE `sg_thin_no_span` SET spanish=1 WHERE `Company Name` LIKE '%iglesia%';
+UPDATE `sg_thin_no_span` SET spanish=1 WHERE `Company Name` LIKE 'la %';
+UPDATE `sg_thin_no_span` SET spanish=1 WHERE `Company Name` LIKE 'las %';
+UPDATE `sg_thin_no_span` SET spanish=1 WHERE `Company Name` LIKE 'los %';
+UPDATE `sg_thin_no_span` SET spanish=1 WHERE `Company Name` LIKE 'el %';
+UPDATE `sg_thin_no_span` SET spanish=1 WHERE `Company Name` LIKE '% de %';
+UPDATE `sg_thin_no_span` SET spanish=1 WHERE `Company Name` LIKE '%mexico%';
